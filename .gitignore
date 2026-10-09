@@ -1,0 +1,34 @@
+# Arduino
+*.hex
+*.elf
+*.map
+
+# Build artifacts
+.build/
+/*.o
+/*.a
+/lib/
+/src/lib/
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*~
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Backup files
+*.bak
+*.backup
+*.orig
+*.rej
+
+# EEPROM data (if dumped)
+*.eep
+
+# Misc
+logs/
+*.log

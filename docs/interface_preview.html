@@ -1,0 +1,100 @@
+<!DOCTYPE html><html><head>
+<meta charset='utf-8'><meta name='viewport' content='width=device-width,initial-scale=1'>
+<title>CPGE Bell</title>
+<style>
+body{font-family:Arial;background:#f4f4f4;margin:0;padding:20px;color:#333}
+.container{max-width:900px;margin:auto}
+.section{background:#fff;padding:20px;margin:10px 0;border-radius:8px;box-shadow:0 2px 5px rgba(0,0,0,.1)}
+h1,h2{color:#2980b9;margin-top:0}
+label{font-weight:bold}
+input,select{padding:6px;border:1px solid #ddd;border-radius:4px}
+input[type=submit]{background:#3498db;color:#fff;border:none;padding:8px 14px;cursor:pointer;margin:5px 0}
+input[type=submit]:hover{background:#2980b9}
+.schItem{display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid #eee}
+.schItem:last-child{border-bottom:none}
+#toast{position:fixed;top:10%;left:50%;transform:translateX(-50%);background:#333;color:#fff;padding:8px 16px;border-radius:4px;display:none;z-index:1000}
+.button-group{display:flex;gap:10px;flex-wrap:wrap;}
+.progWrap{display:flex;gap:14px;flex-wrap:wrap;margin:8px 0}
+.hint{font-size:13px;color:#666;margin-top:8px}
+</style></head><body>
+<div id='toast'></div>
+<div class='container'><h1>CPGE Bell Configuration</h1>
+<div class='section'><h2>Date / Time</h2>
+<form action='/saveDateTime' method='post' onsubmit='return send(this)'>
+<label>Date: <input type='date' name='date' required value='2026-10-09'></label><br>
+<label>Time: <input type='time' name='time' required value='14:30'></label><br>
+<label>DOW (1-7): <input type='number' name='dow' min='1' max='7' required value='6'></label><br>
+<input type='submit' value='Save'></form>
+<div class='button-group'>
+<form action='/syncNTP' method='post' onsubmit='return send(this)'>
+<input type='submit' value='Sync NTP'></form>
+<form action='/syncMobile' method='post' onsubmit='return send(this)'>
+<input type='hidden' name='mobileTime' id='mTime'>
+<input type='submit' value='Sync Mobile' onclick='let now = new Date(); let year = now.getFullYear(); let month = String(now.getMonth() + 1).padStart(2, "0"); let day = String(now.getDate()).padStart(2, "0"); let hour = String(now.getHours()).padStart(2, "0"); let minute = String(now.getMinutes()).padStart(2, "0"); document.getElementById("mTime").value = year + "-" + month + "-" + day + "T" + hour + ":" + minute;'>
+</form></div></div>
+
+<div class='section'><h2>Bell Settings</h2>
+<form action='/saveBellSettings' method='post' onsubmit='return send(this)'>
+<label>Duration (1-30 s): <input type='number' name='duration' min='1' max='30' required value='5'></label><br>
+<label>PROGRAMME:</label>
+<div class='progWrap'>
+<label><input type='checkbox' class='progBox' name='program_normal' onclick='onlyOneProgram(this)'> NORMAL</label>
+<label><input type='checkbox' class='progBox' name='program_ramadan' onclick='onlyOneProgram(this)'> RAMADAN</label>
+<label><input type='checkbox' class='progBox' name='program_custom' checked onclick='onlyOneProgram(this)'> CUSTOM</label>
+</div>
+<div class='hint'>Current programme: <strong>CUSTOM</strong></div>
+<label>Enabled: <input type='checkbox' name='enabled' checked></label><br>
+<input type='submit' value='Save'></form>
+<div class='hint'>CUSTOM uses the schedules stored below.</div>
+</div>
+
+<div class='section'><h2>Standby Period</h2>
+<form action='/saveStandby' method='post' onsubmit='return send(this)'>
+<label>Sleep: <input type='time' name='sleep' required value='22:00'></label><br>
+<label>Wake: <input type='time' name='wake' required value='06:00'></label><br>
+<input type='submit' value='Save'></form></div>
+
+<div class='section'><h2>Custom Schedules</h2>
+<div class='hint'>These schedules are always stored, but they ring only when <strong>CUSTOM</strong> is checked in PROGRAMME.</div>
+<p>No custom schedules configured.</p>
+<form action='/addSchedule' method='post' onsubmit='return send(this)'>
+<label>Time: <input type='time' name='time' required></label><br>
+<label>Days:
+<input type='checkbox' name='sun'>Sun
+<input type='checkbox' name='mon'>Mon
+<input type='checkbox' name='tue'>Tue
+<input type='checkbox' name='wed'>Wed
+<input type='checkbox' name='thu'>Thu
+<input type='checkbox' name='fri'>Fri
+<input type='checkbox' name='sat'>Sat
+</label><br><input type='submit' value='Add Custom Schedule'></form></div>
+
+<div class='section'><h2>Custom Message</h2>
+<form action='/saveCustomMessage' method='post' onsubmit='return send(this)'>
+<label>Message: <input type='text' name='message' maxlength='40' value='Hello World'></label><br>
+<label>Animate: <input type='checkbox' name='animate'></label><br>
+<input type='submit' value='Save'></form></div>
+<div class='section'><h2>UTC Offset</h2>
+<form action='/saveUTCOffset' method='post' onsubmit='return send(this)'>
+<label>UTC Offset (hours): <input type='number' name='offset' min='-12' max='14' step='0.5' required value='0'></label><br>
+<small>Offset from GMT (e.g., -5 for EST, +1 for CET)</small><br>
+<input type='submit' value='Save'></form></div>
+
+<script>
+function send(form){
+  event.preventDefault();
+  fetch(form.action,{method:form.method,body:new FormData(form)})
+  .then(r=>r.text())
+  .then(t=>{
+     const msg=document.getElementById('toast');
+     msg.textContent=t;msg.style.display='block';
+     setTimeout(()=>{msg.style.display='none';location.reload();},800);
+  });
+  return false;}
+function onlyOneProgram(clicked){
+  const boxes=document.querySelectorAll('.progBox');
+  boxes.forEach(b=>{ if(b!==clicked) b.checked=false; });
+  if(!clicked.checked) clicked.checked=true;}
+</script>
+
+</div></body></html>
