@@ -1,6 +1,6 @@
 # Sonnette WiFi Only Low
 
-An Arduino-based WiFi-enabled bell/schedule system suitable for all schools and environments that need automated bell scheduling.
+An esp8266-based WiFi-enabled bell/schedule system suitable for all schools and environments that need automated bell scheduling.
 
 ## Features
 
