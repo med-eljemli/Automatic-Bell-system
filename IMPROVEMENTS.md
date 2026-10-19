@@ -9,4 +9,4 @@
 - Islamic calendar / Ramadan dates (API or lookup to auto‑switch Ramadan program)  
 
 *Last updated: 2026‑10‑09*  
-*Author: MOHAMED EL JEMLI (ENSIAS Student)*
+*Author: MOHAMED EL JEMLI (ENSIAS Smart Systems Engineering Student)*

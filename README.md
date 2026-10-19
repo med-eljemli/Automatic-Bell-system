@@ -11,7 +11,7 @@ An Arduino-based WiFi-enabled bell/schedule system suitable for all schools and 
 - LCD display with date/time, temperature, greetings, and scrolling messages
 - Web configuration portal accessible via ESP8266 soft AP
 - EEPROM storage for settings and schedules
-- Relay control for bell activation
+- Relay control for bell activation (active low)
 - Temperature updates from OpenWeatherMap
 
 ## Hardware Requirements
@@ -66,9 +66,14 @@ Sonnette_wifionly_low_organized/
 ├── src/
 │   └── Sonnette_wifionly_low.ino
 └── docs/
-    └── utc_offset_interface.html
+    ├── interface_preview.html
+    ├── pictures/
+    │   ├── Prototype1_back.jpeg
+    │   └── Prototype1_front.jpeg
+    └── screenshots/
+        ├── Interface_overview1.png
+        └── Interface_overview2.png
 ```
-
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
@@ -76,5 +81,9 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ## Acknowledgements
 
 - Based on original work for CPGE Salmane Alfarissi.
-- Developed by MOHAMED EL JEMLI, ENSIAS student.
+- Developed by MOHAMED EL JEMLI, Smart systems Engineering at Ensias
 - Uses various open-source libraries.
+
+## Contributions
+
+This project was developed with the assistance of [Claude Code](https://claude.com/code).
