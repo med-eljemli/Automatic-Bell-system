@@ -42,7 +42,7 @@ Before installing the libraries, you need to add the ESP8266 board support to Ar
 5. Copy `src/Sonnette_wifionly_low.ino` to your Arduino sketchbook.
 6. Select the appropriate ESP8266 board and port.
 7. Upload the sketch.
-8. Connect to the access point `CPGE_BELL` (password: `XXXXXXX` - these credentials can be changed in the source code or through the configuration portal after initial setup). 
+8. Connect to the access point `MY_BELL` (password: `XXXXXXX` - these credentials can be changed in the source code or through the configuration portal after initial setup). 
 9. Open `http://192.168.4.1` in a browser to configure.
 
 ## Configuration
